@@ -53,6 +53,9 @@ username: @{update.message.from_user.username if update.message.from_user.userna
 
     return LANGUAGE
 
+async def admin() -> int:
+    return ConversationHandler.END
+
 
 async def language(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query

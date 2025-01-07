@@ -2,12 +2,14 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ConversationHandler, MessageHandler, CallbackQueryHandler, \
     filters
 
-from bot.service import start, cancel, infos, finish, error_handler, INFORMATION, LANGUAGE, language, FINISH
-from config import BOT_TOKEN
+from bot.service import start, cancel, infos, finish, error_handler, INFORMATION, LANGUAGE, language, FINISH, admin
+from config import BOT_TOKEN, MY_CHAT_ID
 
 
 def main() -> None:
     application = ApplicationBuilder().token(BOT_TOKEN).read_timeout(300).write_timeout(300).build()
+
+    application.add_handler(MessageHandler(filters.Chat(MY_CHAT_ID), admin))
 
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler("start", start)],
