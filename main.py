@@ -1,8 +1,8 @@
-
+from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ConversationHandler, MessageHandler, CallbackQueryHandler, \
     filters
 
-from bot.service import start, cancel, infos, finish, error_handler, INFORMATION, LANGUAGE, language
+from bot.service import start, cancel, infos, finish, error_handler, INFORMATION, LANGUAGE, language, FINISH
 from config import BOT_TOKEN
 
 
@@ -14,10 +14,19 @@ def main() -> None:
         states={
             LANGUAGE: [CallbackQueryHandler(language)],
             INFORMATION: [CommandHandler('cancel', cancel), MessageHandler(filters.TEXT, infos)],
+            FINISH: [CommandHandler('finish', finish)]
 
         },
-        fallbacks=[CommandHandler('finish', finish)]
+        fallbacks=[CommandHandler('cancel', cancel)]
     )
 
     application.add_handler(conv_handler)
     application.add_error_handler(error_handler)
+
+
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
+
+
+if __name__ == '__main__':
+    main()
+
